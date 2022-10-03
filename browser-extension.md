@@ -1,5 +1,8 @@
 autoscale: true
 slide-transition: true
+theme: Fira
+text: #c55749
+header: #c55749
 
 [.header: alignment(left), line-height(1)]
 [.text: alignment(left), line-height(1)]
@@ -97,11 +100,125 @@ slide-transition: true
 
 ![original fit](chrome-desktop-ui.png)
 
-# Example 1
+# Message passing :incoming_envelope:
+
+- One-time messages
+- Long-lived messages
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Example 1 - Sideloading
 
 - Chrome Developer Mode & Sideloading
 - Starter Extension Template
   - `https://github.com/MattSheehanDev/chrome-manifest-v3-starter-template`
+
+^ chrome://extensions
+^ Chrome Developer Mode -> Load unpacked
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.code: auto(42), text-scale(1)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Minimum Manifest File
+
+```json
+{
+  // Required values
+  "manifest_version": 3,
+  "name": "Extension Name",
+  "version": "0.0.1",
+
+  // Recommended values
+  "description": "Plain text description",
+  "action": {...},
+  "icons": {...},
+}
+```
+https://developer.chrome.com/docs/extensions/mv3/manifest/
+
+^ “name” - appears in chrome web store and browser
+  “version” - start small, 0.0.1, each update in the chrome web store has to be incremented
+  “description” - 132 characters or less, plain text only (no html or other markup)
+  “icons” - 16/32/48/128px size images (preferably PNGs)
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.code: auto(42), text-scale(1)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Common APIs
+
+- chrome.actions
+  - Control the extensions toolbar icon and toolbar popup UI
+- chrome.tabs :arrow_right: `permissions: ["tabs"]`
+  - Needed to communicate with a tab's Content Script
+
+^ But can also do things such as create a new tab or modify the tab.
+
+- chrome.storage :arrow_right: `permissions: ["storage"]`
+  - A more robust version of the localStorage web API
+
+^ Storage is persistent and asynchronous, works with Chrome sync.
+
+^ There are way to many extension APIs to cover all of them, but these are some common ones.
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Example 2 - Debugging
+
+- Background Script Errors
+
+^ When there is an error in the extension you will see an Errors button.
+
+- Inspecting the Background Script
+
+^ You can inspect the background script in chrome://extensions
+
+- Content Script Logs
+
+^ Content script logs log to the webpage console
+
+- Inspecting the Popup UI
+
+^ Popop UI logs log to their own console (inspect the popup html)
+
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Example 3 - Full Extension
 
 ---
 
@@ -128,5 +245,5 @@ slide-transition: true
 
 ^ Creating an extension that does too many things will result in your submission getting rejected.
 
-
+^ There is another way to distribute your extension and that's going to `chrome://extensions` -> Pack extension. That wil create a CRX package that can be distributed on Linux.
 
