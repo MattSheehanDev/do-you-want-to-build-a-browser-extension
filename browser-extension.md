@@ -55,6 +55,9 @@ header: #c55749
 
 ^ Contains listeners for browser events. Dormant until needed when an event fires.
 ^ Has access to the Chrome extension APIs the extension has declared permission to.
+^ Does not have access to the DOM
+^ Does not have access to XMLHttpRequest
+^ Does have access to fetch() API
 
 - Content Script
 
@@ -182,7 +185,6 @@ header: #c55749
 
 ![original fit](chrome-desktop-ui-ext.png)
 
--
 # Toolbar and Popup UI
 
 | API | Permission|
@@ -218,25 +220,45 @@ header: #c55749
 
 [.header: alignment(center), line-height(2), text-scale(1)]
 [.text: alignment(left), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+[.table-separator: #000000, stroke-width(1)] 
+[.table: margin(10)]
+
+![original fit](chrome-desktop-ui-ext.png)
+
+# Toolbar and Popup UI
+
+| API | Permission|
+|:---|---:|
+| chrome.declarativeContent | "declarativeContent" |
+
+- TODO
+- https://developer.chrome.com/docs/extensions/reference/declarativeContent/
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
 [.code: auto(42), text-scale(1)]
 [.background-color: #c55749]
 [.autoscale: false]
 
 ![original fit](chrome-desktop-ui.png)
 
-# Other Common APIs
+# Events and Event Handling
+
+- TODO
+- https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/#events
+
+<!-- # Other Common APIs
 
 - chrome.tabs :arrow_right: `permissions: ["tabs"]`
   - Needed to communicate with a tab's Content Script
 
 ^ But can also do things such as create a new tab or modify the tab.
 
-- chrome.storage :arrow_right: `permissions: ["storage"]`
-  - A more robust version of the localStorage web API
-
-^ Storage is persistent and asynchronous, works with Chrome sync.
-
-^ There are way to many extension APIs to cover all of them, but these are some common ones.
+^ There are way to many extension APIs to cover all of them, but these are some common ones. -->
 
 ---
 
@@ -254,9 +276,15 @@ header: #c55749
 
 ![original inline](send-one-time-message.png)
 
+<!-- | API | Permission|
+|:---|---:|
+| chrome.actions | none | -->
+
 ^ - Content Scripts run in the context of the web page not the context of the extension, so they often need some way of communicating from the webpage to the extension.
   - They do this by communicating using messages.
     - Messages can be any JSON object that both sides (the extension and the content script) can listen for and respond to.
+
+^ The `runtime.onMessage` event is fired in each content script running in the specified tab.
 
 ^ https://developer.chrome.com/docs/extensions/mv3/messaging/
 
@@ -354,7 +382,99 @@ chrome.runtime.onConnect.addListener((port) => {
 
 ---
 
+<!-- [.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(1)]
+[.code: auto(42), text-scale(1)]
+[.background-color: #c55749]
+[.autoscale: true]
+[.table-separator: #000000, stroke-width(1)] 
+[.table: margin(10)]
+
+![original fit](chrome-desktop-ui.png)
+
+# Service Workers - Quirks and Features
+
+- Service workers are short lived execution environments
+  ![inline 100%](service-worker-life.png)
+
+- 
+
+--- -->
+
 [.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(1)]
+[.code: auto(42), text-scale(1)]
+[.background-color: #c55749]
+[.autoscale: true]
+[.table-separator: #000000, stroke-width(1)] 
+[.table: margin(10)]
+
+![original fit](chrome-desktop-ui.png)
+
+# Service Workers - Persisting State
+
+| API | Permission |
+|:---|---:|
+| chrome.storage | "storage" |
+
+[.column]
+- Service workers are short lived execution environments
+  ![inline 100%](service-worker-life.png)
+
+[.column]
+![inline](storage-api-local.png)
+
+<!-- - Service workers are short lived execution environments -->
+
+<!-- - Introducing the Storage API
+  - Permissions: `"storage"` -->
+
+<!-- ![inline 50%](service-worker-life.png)
+
+![inline](storage-api-local.png) -->
+
+<!-- ```javascript
+
+chrome.storage.local.set({key: value}, () => {
+  console.log(`${key} is set to ${value}`);
+});
+
+chrome.storage.local.get(['key'], (result) => {
+  console.log(`Value of key is set to ${result.key}`);
+});
+
+``` -->
+
+^ Serice workers are short lived execution environments.
+  They start up, do some work, and will get terminated multiple times in a browser session
+  This means that you can't have in-memory state
+
+^ Instead you can use the Storage API which requires the storage permission
+  You can also use `chrome.storage.sync` to sync settings to the users chrome profile.
+
+^ Storage is persistent and asynchronous, works with Chrome sync.
+
+^ Works very similar to the localStorage API exposed to the web browsers.
+  A more robust version of the localStorage API
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.code: auto(42), text-scale(1)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](chrome-desktop-ui.png)
+
+# Service Workers - Quirks
+
+- TODO
+- https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/#alarms
+
+---
+
+<!-- [.header: alignment(center), line-height(2), text-scale(1)]
 [.text: alignment(left), line-height(1), text-scale(0.75)]
 [.code: auto(42), text-scale(1)]
 [.background-color: #c55749]
@@ -402,7 +522,7 @@ https://developer.chrome.com/docs/extensions/mv3/manifest/
     - 128x128 - displays on installation and in the chrome web store
     - You may provide icons of any other size you wish, and Chrome will attempt to use the best size where appropriate. For example, Windows often requires 32-pixel icons, and if the app includes a 32-pixel icon, Chrome will choose that instead of shrinking a 48-pixel icon.
 
----
+--- -->
 
 [.header: alignment(center), line-height(2), text-scale(1)]
 [.text: alignment(left), line-height(1), text-scale(0.75)]
@@ -426,7 +546,9 @@ https://developer.chrome.com/docs/extensions/mv3/manifest/
 
 # Security considerations
 
-- replace text here
+- TODO
+- https://developer.chrome.com/docs/extensions/mv3/messaging/#security-considerations
+- https://developer.chrome.com/docs/extensions/mv3/xhr/
 
 ---
 
