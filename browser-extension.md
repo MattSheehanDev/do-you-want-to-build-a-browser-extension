@@ -174,6 +174,25 @@ header: #c55749
 
 ^ We've all been there, so-and-so app needs access to locationServices and Blutooth, ... delete
 
+^ permissions -  contain items from a list of known strings (such as "geolocation")
+^ optional_permissions - like regular permissions, but are granted by the extension's user at runtime, rather than in advance
+^ host_permissions contain one or more match patterns that give access to one or more hosts
+
+^ There are way to many extension APIs to cover all of them, but some common ones will naturally be discovered.
+
+^ https://developer.chrome.com/docs/extensions/mv3/declare_permissions/
+^ https://developer.chrome.com/docs/extensions/reference/
+^ https://developer.chrome.com/docs/extensions/mv3/permission_warnings/
+
+<!-- # Other Common APIs
+
+- chrome.tabs :arrow_right: `permissions: ["tabs"]`
+  - Needed to communicate with a tab's Content Script
+
+^ But can also do things such as create a new tab or modify the tab.
+
+^ There are way to many extension APIs to cover all of them, but these are some common ones. -->
+
 ---
 
 [.header: alignment(center), line-height(2), text-scale(1)]
@@ -216,12 +235,14 @@ header: #c55749
 ^ Each value is optional.
 ^ Each value can be programatically altered.
 
+^ Manifest V3 consolidates chrome.browserAction and chrome.pageAction into a single chrome.action API.
+
 ---
 
 [.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.text: alignment(left), line-height(1), text-scale(1.2)]
 [.background-color: #c55749]
-[.autoscale: false]
+[.autoscale: true]
 [.table-separator: #000000, stroke-width(1)] 
 [.table: margin(10)]
 
@@ -233,8 +254,32 @@ header: #c55749
 |:---|---:|
 | chrome.declarativeContent | "declarativeContent" |
 
-- TODO
-- https://developer.chrome.com/docs/extensions/reference/declarativeContent/
+[.column]
+- Enables or disables the extensions action depending on the properties of a web page.
+
+^ Allows you to change the toolbar action depending on the content of a webpage (url, css selector) without having to inject a content script or add host permissions.
+
+^ So you can kind of see why it needs additional permissions, because it requires you to get information about the current web page.
+
+[.column]
+![inline fit](declarative-content-rule.png)
+
+<!-- ```javascript
+
+let rule = {
+  conditions: [
+    new chrome.declarativeContent.PageStateMatcher({
+      css: ["input[type='password']"]
+    })
+  ],
+  actions: [ new chrome.declarativeContent.ShowAction() ]
+};
+
+chrome.declarativeContent.onPageChanged.addRules([rule]);
+
+``` -->
+
+^ https://developer.chrome.com/docs/extensions/reference/declarativeContent/
 
 ---
 
@@ -242,23 +287,30 @@ header: #c55749
 [.text: alignment(left), line-height(1), text-scale(0.75)]
 [.code: auto(42), text-scale(1)]
 [.background-color: #c55749]
-[.autoscale: false]
+[.autoscale: true]
 
 ![original fit](chrome-desktop-ui.png)
 
-# Events and Event Handling
+# Service Workers
 
-- TODO
-- https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/#events
+[.column]
+- Service workers are more specialized web workers
+  - Communicate through messages
+  - Events and event handlers
+- Don't have access to anything from the global `Window` interface
+  - DOM
+  - localStorage
+  - XMLHttpRequest (`fetch()` Web API available)
 
-<!-- # Other Common APIs
+<!-- - Canvas (OffscreenCanvas Web API available) -->
 
-- chrome.tabs :arrow_right: `permissions: ["tabs"]`
-  - Needed to communicate with a tab's Content Script
+[.column]
+![inline fit](chrome-ext-architecture.png)
 
-^ But can also do things such as create a new tab or modify the tab.
+^ Web workers are scripts that run in a background thread separate from the main execution thread.
 
-^ There are way to many extension APIs to cover all of them, but these are some common ones. -->
+^ https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/
+^ https://developer.chrome.com/docs/extensions/mv2/background_migration/
 
 ---
 
@@ -288,8 +340,6 @@ header: #c55749
 
 ^ https://developer.chrome.com/docs/extensions/mv3/messaging/
 
-<!-- ![original inline](background-sendmsg.png) -->
-
 <!-- ```javascript
 
 // contentScript.js, send message to background service worker
@@ -297,12 +347,10 @@ chrome.runtime.sendMessage({message: "hello"}, function(response) {
   console.log(response.message);
 });
 
-
 // background.js, send message to content script
 chrome.tabs.sendMessage(tabId, {mesage: "hello"}, function(response) {
   console.log(response.message);
 });
-
 
 // contentScript.js or background.js listener
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -379,27 +427,37 @@ chrome.runtime.onConnect.addListener((port) => {
 
 ^ Popop UI logs log to their own console (inspect the popup html)
 
-
 ---
 
-<!-- [.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(1)]
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
 [.code: auto(42), text-scale(1)]
 [.background-color: #c55749]
-[.autoscale: true]
-[.table-separator: #000000, stroke-width(1)] 
-[.table: margin(10)]
+[.autoscale: false]
 
 ![original fit](chrome-desktop-ui.png)
 
-# Service Workers - Quirks and Features
+# Service Workers
 
-- Service workers are short lived execution environments
-  ![inline 100%](service-worker-life.png)
+- Service Workers (background script) are non-persistent
+  ![inline 50%](service-worker-life.png)
+  - **DO** Register event listeners at startup
+  - **Do not** store state in global variables
+  - **Do not** use `setTimeout` or `setInterval`
 
-- 
+^ Reduces resource cost of extension.
+^ In Manifest V2 version of extensions you could set you background page persistence to true or false,
+  now you just don't get an option and it's always false.
 
---- -->
+^ Serice workers are short lived execution environments.
+  They start up, do some work, and will get terminated multiple times in a browser session
+  This means that you can't have in-memory state
+
+^ There is a chrome.alarms api that operates similar to setTimeout
+
+^ https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/#events
+
+---
 
 [.header: alignment(center), line-height(2), text-scale(1)]
 [.text: alignment(left), line-height(1), text-scale(1)]
@@ -411,27 +469,18 @@ chrome.runtime.onConnect.addListener((port) => {
 
 ![original fit](chrome-desktop-ui.png)
 
-# Service Workers - Persisting State
+# Persisting State
 
 | API | Permission |
 |:---|---:|
 | chrome.storage | "storage" |
 
 [.column]
-- Service workers are short lived execution environments
-  ![inline 100%](service-worker-life.png)
+- Similar API to localStorage but more robust
+- Can also sync settings to a user's chrome profile
 
 [.column]
 ![inline](storage-api-local.png)
-
-<!-- - Service workers are short lived execution environments -->
-
-<!-- - Introducing the Storage API
-  - Permissions: `"storage"` -->
-
-<!-- ![inline 50%](service-worker-life.png)
-
-![inline](storage-api-local.png) -->
 
 <!-- ```javascript
 
@@ -445,32 +494,14 @@ chrome.storage.local.get(['key'], (result) => {
 
 ``` -->
 
-^ Serice workers are short lived execution environments.
-  They start up, do some work, and will get terminated multiple times in a browser session
-  This means that you can't have in-memory state
-
 ^ Instead you can use the Storage API which requires the storage permission
-  You can also use `chrome.storage.sync` to sync settings to the users chrome profile.
+  
+^ You can also use `chrome.storage.sync` to sync settings to the users chrome profile (Chrome sync feature).
 
-^ Storage is persistent and asynchronous, works with Chrome sync.
+^ Storage is persistent and asynchronous therefore more performant.
 
 ^ Works very similar to the localStorage API exposed to the web browsers.
   A more robust version of the localStorage API
-
----
-
-[.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(0.75)]
-[.code: auto(42), text-scale(1)]
-[.background-color: #c55749]
-[.autoscale: false]
-
-![original fit](chrome-desktop-ui.png)
-
-# Service Workers - Quirks
-
-- TODO
-- https://developer.chrome.com/docs/extensions/mv3/migrating_to_service_workers/#alarms
 
 ---
 
