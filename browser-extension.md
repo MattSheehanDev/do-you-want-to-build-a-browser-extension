@@ -8,7 +8,7 @@ header: #c55749
 [.text: alignment(left), line-height(1)]
 [.background-color: #c55749]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 -
 ## Do You Want to Build a Browser Extension?
@@ -20,7 +20,7 @@ header: #c55749
 [.text: alignment(left), line-height(1), text-scale(0.75)]
 [.background-color: #c55749]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Getting Started
 
@@ -28,6 +28,7 @@ header: #c55749
   - Google Chrome, Microsoft Edge
   - Firefox compatibility: `https://www.extensiontest.com`
 
+^ Before the WebExtensions API, every browser had it's own thing, Firefox had an Add-ons SDK, Internet Explorer had Silverlight Add-ons it was a mess.
 ^ Firefox is highly compatible. Most of the changes are going to be simply finding and replacing the "chrome" namespace with the "browser" namespace.
 
 - Focus on Manifest V3 WebExtension API
@@ -42,7 +43,7 @@ header: #c55749
 [.text: alignment(left), line-height(1), text-scale(0.75)]
 [.background-color: #c55749]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Anatomy of a Browser Extension
 
@@ -81,12 +82,12 @@ header: #c55749
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 -
 # Architecture
 
-![inline fit](chrome-ext-architecture.png)
+![inline fit](assets/chrome-ext-architecture.png)
 
 ^ Background script listens for events from the browser and can also send messages back to the browser or to other extensions.
 
@@ -101,12 +102,12 @@ header: #c55749
 [.background-color: #c55749]
 [.autoscale: true]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Identifying the Components
 
 [.column]
-![inline left](manifest-colored.png)
+![inline left](assets/manifest-colored.png)
 
 <!-- ```json
 {
@@ -131,7 +132,7 @@ header: #c55749
 <sub>_*Condensed Manifest_</sub>
 
 [.column]
-![inline left](chrome-ext-files.png)
+![inline left](assets/chrome-ext-files.png)
 
 ^ Background script
   - single background script
@@ -144,7 +145,7 @@ header: #c55749
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Example 1 - Sideloading
 
@@ -162,7 +163,7 @@ header: #c55749
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # APIs and Permissions
 
@@ -202,7 +203,7 @@ header: #c55749
 [.table-separator: #000000, stroke-width(1)] 
 [.table: margin(10)]
 
-![original fit](chrome-desktop-ui-ext.png)
+![original fit](assets/chrome-desktop-ui-ext.png)
 
 # Toolbar and Popup UI
 
@@ -246,7 +247,7 @@ header: #c55749
 [.table-separator: #000000, stroke-width(1)] 
 [.table: margin(10)]
 
-![original fit](chrome-desktop-ui-ext.png)
+![original fit](assets/chrome-desktop-ui-ext.png)
 
 # Toolbar and Popup UI
 
@@ -262,7 +263,7 @@ header: #c55749
 ^ So you can kind of see why it needs additional permissions, because it requires you to get information about the current web page.
 
 [.column]
-![inline fit](declarative-content-rule.png)
+![inline fit](assets/declarative-content-rule.png)
 
 <!-- ```javascript
 
@@ -289,7 +290,7 @@ chrome.declarativeContent.onPageChanged.addRules([rule]);
 [.background-color: #c55749]
 [.autoscale: true]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Service Workers
 
@@ -305,7 +306,7 @@ chrome.declarativeContent.onPageChanged.addRules([rule]);
 <!-- - Canvas (OffscreenCanvas Web API available) -->
 
 [.column]
-![inline fit](chrome-ext-architecture.png)
+![inline fit](assets/chrome-ext-architecture.png)
 
 ^ Web workers are scripts that run in a background thread separate from the main execution thread.
 
@@ -319,14 +320,14 @@ chrome.declarativeContent.onPageChanged.addRules([rule]);
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 -
 # Message passing :incoming_envelope:
 
 - One-time messages
 
-![original inline](send-one-time-message.png)
+![original inline](assets/send-one-time-message.png)
 
 <!-- | API | Permission|
 |:---|---:|
@@ -366,14 +367,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 -
 # Message passing :incoming_envelope:
 
 - Long-lived connections
 
-![original inline](send-connect-message.png)
+![original inline](assets/send-connect-message.png)
 
 ^ Ports live as long as the frame on the other side is loaded
 
@@ -407,10 +408,11 @@ chrome.runtime.onConnect.addListener((port) => {
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Example 2 - Debugging the pieces
 
+[.column]
 - Background Script Errors
 
 ^ When there is an error in the extension you will see an Errors button.
@@ -427,6 +429,9 @@ chrome.runtime.onConnect.addListener((port) => {
 
 ^ Popop UI logs log to their own console (inspect the popup html)
 
+[.column]
+![inline fit](assets/chrome-ext-architecture.png)
+
 ---
 
 [.header: alignment(center), line-height(2), text-scale(1)]
@@ -435,12 +440,12 @@ chrome.runtime.onConnect.addListener((port) => {
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Service Workers
 
 - Service Workers (background script) are non-persistent
-  ![inline 50%](service-worker-life.png)
+  ![inline 50%](assets/service-worker-life.png)
   - **DO** Register event listeners at startup
   - **Do not** store state in global variables
   - **Do not** use `setTimeout` or `setInterval`
@@ -467,7 +472,7 @@ chrome.runtime.onConnect.addListener((port) => {
 [.table-separator: #000000, stroke-width(1)] 
 [.table: margin(10)]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Persisting State
 
@@ -480,7 +485,7 @@ chrome.runtime.onConnect.addListener((port) => {
 - Can also sync settings to a user's chrome profile
 
 [.column]
-![inline](storage-api-local.png)
+![inline](assets/storage-api-local.png)
 
 <!-- ```javascript
 
@@ -560,7 +565,7 @@ https://developer.chrome.com/docs/extensions/mv3/manifest/
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Example 3 - Full Extension
 
@@ -569,17 +574,52 @@ https://developer.chrome.com/docs/extensions/mv3/manifest/
 ---
 
 [.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.text: alignment(left), line-height(0.65), text-scale(0.50)]
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
+-
 # Security considerations
 
-- TODO
-- https://developer.chrome.com/docs/extensions/mv3/messaging/#security-considerations
-- https://developer.chrome.com/docs/extensions/mv3/xhr/
+- Trustworthiness: Content script < Background page
+- Content-Security-Policy and Sandboxes
+  - `chrome-extension://`
+  - Sandboxed extensions are served from a unique origin. Access denied because of same-origin policy.
+
+![original inline](assets/manifest-sandbox.png)
+
+<!-- <sub>_*Allows use of eval()*_</sub> -->
+
+^ CSP is a set of directives that restricts how resources such as JS load.
+^ You can specify files that you want to be sandboxed and specifically set different CSPs for them.
+
+^ Sanitize any input from the content script
+^ Assume data sent to the content script might leak to the web page
+
+^ https://developer.chrome.com/docs/extensions/mv3/messaging/#security-considerations
+^ https://developer.chrome.com/docs/extensions/mv3/xhr/
+^ https://developer.chrome.com/docs/extensions/mv3/mv3-migration/#content-security-policy
+^ https://developer.chrome.com/docs/extensions/mv3/sandboxingEval/
+^ https://www.youtube.com/watch?v=GBxv8SaX0gg
+
+<!-- ```json
+
+{
+  ...
+  "content_security_policy": {
+    "sandbox": "sandbox allow-scripts; script-src 'self' 'unsafe-inline' 'unsafe-eval'; child-src 'self';"
+  },
+  "sandbox": {
+    "pages": [
+      "sandboxedExtensionPage.html"
+    ]
+  },
+  ...
+}
+
+``` -->
 
 ---
 
@@ -588,7 +628,7 @@ https://developer.chrome.com/docs/extensions/mv3/manifest/
 [.background-color: #c55749]
 [.autoscale: false]
 
-![original fit](chrome-desktop-ui.png)
+![original fit](assets/chrome-desktop-ui.png)
 
 # Publishing your Extension
 
