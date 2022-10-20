@@ -160,132 +160,6 @@ header: #c55749
 
 [.header: alignment(center), line-height(2), text-scale(1)]
 [.text: alignment(left), line-height(1), text-scale(0.75)]
-[.background-color: #c55749]
-[.autoscale: false]
-
-![original fit](assets/chrome-desktop-ui.png)
-
-# APIs and Permissions
-
-- Chrome exposes a number of browser API's through the `chrome.*` namespace (`browser.*`)
-- Some of these API's require requesting extra permission
-  - Minimize requested permissions
-  - Optional features with permissions can registered as `optional_permissions`
-  - Users trust extensions with less permission warnings
-
-^ We've all been there, so-and-so app needs access to locationServices and Blutooth, ... delete
-
-^ permissions -  contain items from a list of known strings (such as "geolocation")
-^ optional_permissions - like regular permissions, but are granted by the extension's user at runtime, rather than in advance
-^ host_permissions contain one or more match patterns that give access to one or more hosts
-
-^ There are way to many extension APIs to cover all of them, but some common ones will naturally be discovered.
-
-^ https://developer.chrome.com/docs/extensions/mv3/declare_permissions/
-^ https://developer.chrome.com/docs/extensions/reference/
-^ https://developer.chrome.com/docs/extensions/mv3/permission_warnings/
-
-<!-- # Other Common APIs
-
-- chrome.tabs :arrow_right: `permissions: ["tabs"]`
-  - Needed to communicate with a tab's Content Script
-
-^ But can also do things such as create a new tab or modify the tab.
-
-^ There are way to many extension APIs to cover all of them, but these are some common ones. -->
-
----
-
-[.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(center), line-height(1), text-scale(0.75)]
-[.background-color: #c55749]
-[.autoscale: false]
-[.table-separator: #000000, stroke-width(1)] 
-[.table: margin(10)]
-
-![original fit](assets/chrome-desktop-ui-ext.png)
-
-# Toolbar and Popup UI
-
-| API | Permission|
-|:---|---:|
-| chrome.actions | none |
-
-[.column]
-```json
-{
-  "name": "Chrome Extension Action Manifest",
-  "action": {
-    "default_icon": {
-      "16": "images/icon16.png",
-      "24": "images/icon24.png",
-      "32": "images/icon32.png"
-    },
-    "default_title": "tooltip text",
-    "default_popup": "popup.html"
-  }
-  ...
-}
-```
-[.column]
-- `chrome.action.setIcon(...);`
-- `chrome.action.setPopup(...);`
-
-
-^ chrome.actions, control the extensions toolbar icon and toolbar popup UI
-^ Each value is optional.
-^ Each value can be programatically altered.
-
-^ Manifest V3 consolidates chrome.browserAction and chrome.pageAction into a single chrome.action API.
-
----
-
-[.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(1.2)]
-[.background-color: #c55749]
-[.autoscale: true]
-[.table-separator: #000000, stroke-width(1)] 
-[.table: margin(10)]
-
-![original fit](assets/chrome-desktop-ui-ext.png)
-
-# Toolbar and Popup UI
-
-| API | Permission|
-|:---|---:|
-| chrome.declarativeContent | "declarativeContent" |
-
-[.column]
-- Enables or disables the extensions action depending on the properties of a web page.
-
-^ Allows you to change the toolbar action depending on the content of a webpage (url, css selector) without having to inject a content script or add host permissions.
-
-^ So you can kind of see why it needs additional permissions, because it requires you to get information about the current web page.
-
-[.column]
-![inline fit](assets/declarative-content-rule.png)
-
-<!-- ```javascript
-
-let rule = {
-  conditions: [
-    new chrome.declarativeContent.PageStateMatcher({
-      css: ["input[type='password']"]
-    })
-  ],
-  actions: [ new chrome.declarativeContent.ShowAction() ]
-};
-
-chrome.declarativeContent.onPageChanged.addRules([rule]);
-
-``` -->
-
-^ https://developer.chrome.com/docs/extensions/reference/declarativeContent/
-
----
-
-[.header: alignment(center), line-height(2), text-scale(1)]
-[.text: alignment(left), line-height(1), text-scale(0.75)]
 [.code: auto(42), text-scale(1)]
 [.background-color: #c55749]
 [.autoscale: true]
@@ -431,6 +305,132 @@ chrome.runtime.onConnect.addListener((port) => {
 
 [.column]
 ![inline fit](assets/chrome-ext-architecture.png)
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+
+![original fit](assets/chrome-desktop-ui.png)
+
+# APIs and Permissions
+
+- Chrome exposes a number of browser API's through the `chrome.*` namespace (`browser.*`)
+- Some of these API's require requesting extra permission
+  - Minimize requested permissions
+  - Optional features with permissions can registered as `optional_permissions`
+  - Users trust extensions with less permission warnings
+
+^ We've all been there, so-and-so app needs access to locationServices and Blutooth, ... delete
+
+^ permissions -  contain items from a list of known strings (such as "geolocation")
+^ optional_permissions - like regular permissions, but are granted by the extension's user at runtime, rather than in advance
+^ host_permissions contain one or more match patterns that give access to one or more hosts
+
+^ There are way to many extension APIs to cover all of them, but some common ones will naturally be discovered.
+
+^ https://developer.chrome.com/docs/extensions/mv3/declare_permissions/
+^ https://developer.chrome.com/docs/extensions/reference/
+^ https://developer.chrome.com/docs/extensions/mv3/permission_warnings/
+
+<!-- # Other Common APIs
+
+- chrome.tabs :arrow_right: `permissions: ["tabs"]`
+  - Needed to communicate with a tab's Content Script
+
+^ But can also do things such as create a new tab or modify the tab.
+
+^ There are way to many extension APIs to cover all of them, but these are some common ones. -->
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(center), line-height(1), text-scale(0.75)]
+[.background-color: #c55749]
+[.autoscale: false]
+[.table-separator: #000000, stroke-width(1)] 
+[.table: margin(10)]
+
+![original fit](assets/chrome-desktop-ui-ext.png)
+
+# Toolbar and Popup UI
+
+| API | Permission|
+|:---|---:|
+| chrome.actions | none |
+
+[.column]
+```json
+{
+  "name": "Chrome Extension Action Manifest",
+  "action": {
+    "default_icon": {
+      "16": "images/icon16.png",
+      "24": "images/icon24.png",
+      "32": "images/icon32.png"
+    },
+    "default_title": "tooltip text",
+    "default_popup": "popup.html"
+  }
+  ...
+}
+```
+[.column]
+- `chrome.action.setIcon(...);`
+- `chrome.action.setPopup(...);`
+
+
+^ chrome.actions, control the extensions toolbar icon and toolbar popup UI
+^ Each value is optional.
+^ Each value can be programatically altered.
+
+^ Manifest V3 consolidates chrome.browserAction and chrome.pageAction into a single chrome.action API.
+
+---
+
+[.header: alignment(center), line-height(2), text-scale(1)]
+[.text: alignment(left), line-height(1), text-scale(1.2)]
+[.background-color: #c55749]
+[.autoscale: true]
+[.table-separator: #000000, stroke-width(1)] 
+[.table: margin(10)]
+
+![original fit](assets/chrome-desktop-ui-ext.png)
+
+# Toolbar and Popup UI
+
+| API | Permission|
+|:---|---:|
+| chrome.declarativeContent | "declarativeContent" |
+
+[.column]
+- Enables or disables the extensions action depending on the properties of a web page.
+
+^ Allows you to change the toolbar action depending on the content of a webpage (url, css selector) without having to inject a content script or add host permissions.
+
+^ So you can kind of see why it needs additional permissions, because it requires you to get information about the current web page.
+
+[.column]
+![inline fit](assets/declarative-content-rule.png)
+
+<!-- ```javascript
+
+let rule = {
+  conditions: [
+    new chrome.declarativeContent.PageStateMatcher({
+      css: ["input[type='password']"]
+    })
+  ],
+  actions: [ new chrome.declarativeContent.ShowAction() ]
+};
+
+chrome.declarativeContent.onPageChanged.addRules([rule]);
+
+``` -->
+
+^ https://developer.chrome.com/docs/extensions/reference/declarativeContent/
 
 ---
 
